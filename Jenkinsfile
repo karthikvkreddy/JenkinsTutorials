@@ -85,13 +85,19 @@ pipeline {
     stages {
         stage('Download') {
             steps {
-                sh 'echo "artifact file" > generatedFile.txt'
+                sh 'mkdir js'
+                sh 'echo "not a artifact file" > js/build.js'
+                sh 'echo "artifact file" > js/build.min.js'
+                
+                sh 'mkdir css'
+                sh 'echo "not a artifact file" > css/build.css'
+                sh 'echo "artifact file" > css/build.min.css'
             }
         }
     }
     post {
         always {
-            archiveArtifacts artifacts: 'generatedFile.txt', onlyIfSuccessful: true
+            archiveArtifacts artifacts: '**/*.min.*', onlyIfSuccessful: true
         }
     }
 }
