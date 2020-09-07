@@ -21,6 +21,7 @@ pipeline {
 /** 2. When the Pipeline has finished executing, you may need to run clean-up steps or perform some actions based on the outcome of the Pipeline. 
 These actions can be performed in the post section. **/
 
+/**
 pipeline {
     agent any
     stages {
@@ -46,6 +47,32 @@ pipeline {
         changed {
             echo 'This will run only if the state of the Pipeline has changed'
             echo 'For example, if the Pipeline was previously failing but is now successful'
+        }
+    }
+}
+**/
+
+pipeline {
+    agent {
+        docker{
+        image 'python:3.5.1'
+        }
+        label '!windows'
+    }
+
+    environment {
+        DISABLE_AUTH = 'true'
+        DB_ENGINE    = 'sqlite'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Database engine is ${DB_ENGINE}"
+                echo "DISABLE_AUTH is ${DISABLE_AUTH}"
+                sh 'printenv'
+                sh 'python --version'
+            }
         }
     }
 }
