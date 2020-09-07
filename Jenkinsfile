@@ -1,15 +1,11 @@
+ 
 pipeline {
-    agent { 
-        docker { 
-            image 'python:3.5.1'
-             label 'docker'
-                }
-            }
+    agent { docker { image 'python:3.5.1' } }
     stages {
-        stage('build') {
+        stage('Stage 1 - Check Python version') {
             steps {
                 sh 'python --version'
             }
         }
+      
     }
-}
