@@ -81,23 +81,17 @@ pipeline {
 **/
 pipeline {
     agent any
+    
     stages {
-        stage('Build') {
+        stage('Download') {
             steps {
-                sh './gradlew build'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh './gradlew check'
+                sh 'echo "artifact file" > generatedFile.txt'
             }
         }
     }
-
     post {
         always {
-            archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
-            junit 'build/reports/**/*.xml'
+            archiveArtifacts artifacts: 'generatedFile.txt', onlyIfSuccessful: true
         }
     }
 }
