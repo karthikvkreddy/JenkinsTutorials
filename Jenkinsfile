@@ -80,18 +80,24 @@ pipeline {
 }
 **/
 pipeline {
-    agent { docker "java" }
+    agent any
     stages {
-        stage("build") {
+        stage('Build') {
             steps {
-                sh 'mvn clean install -Dmaven.test.failure.ignore=true'
+                sh './gradlew build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh './gradlew check'
             }
         }
     }
+
     post {
         always {
-            archive "target/**/*"
-            junit 'target/surefire-reports/*.xml'
+            archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+            junit 'build/reports/**/*.xml'
         }
     }
 }
